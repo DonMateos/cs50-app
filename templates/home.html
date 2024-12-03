@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <title>Home</title>
+    <style>
+        /* Instructions Section */
+        .instructions-container {
+            text-align: center; /* Centering the text */
+            margin: 20px auto; /* Margin around the section */
+            max-width: 800px; /* Maximum width for better layout */
+            padding: 20px; /* Padding around the text */
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent background for better text visibility */
+            border-radius: 8px; /* Rounded corners */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for better section separation */
+        }
+
+        /* Instructions header styling */
+        .instructions-container h3 {
+            color: #333; /* Dark color for good readability */
+            font-size: 24px; /* Larger font size */
+            margin-bottom: 15px; /* Space below the heading */
+            font-weight: bold; /* Bold heading */
+        }
+
+        /* Instructions list styling */
+        .instructions-container ol {
+            text-align: left; /* Aligning the list to the left */
+            font-size: 18px; /* Larger font size for readability */
+            color: #555; /* Lighter text color for good contrast */
+            margin-bottom: 20px; /* Margin below the list */
+        }
+
+        /* Links in instructions */
+        .instructions-container a {
+            color: #007bff; /* Link color */
+            text-decoration: none; /* Remove underline */
+        }
+
+        .instructions-container a:hover {
+            text-decoration: underline; /* Underline the link on hover */
+        }
+
+        /* Instructions image styling */
+        .instructions-container img {
+            width: 100%; /* Setting the image width to 100% of the container */
+            max-width: 1000px; /* Maximum width for the image */
+            height: auto; /* Keep the image aspect ratio */
+            margin-top: 20px; /* Space above the image */
+            display: block; /* Makes the image a block element */
+            margin-left: auto; /* Centering the image horizontally */
+            margin-right: auto; /* Centering the image horizontally */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="{{ url_for('home') }}">Home</a>
+            {% if 'username' in session %}
+            <a href="{{ url_for('my_games') }}">My Games</a>
+            {% endif %}
+        </div>
+        <div class="navbar-right">
+            {% if 'username' in session %}
+            <a href="{{ url_for('logout') }}">Logout</a>
+            {% else %}
+            <a href="{{ url_for('home') }}">Login</a>
+            <a href="{{ url_for('register') }}">Register</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Login Form -->
+    {% if 'username' not in session %}
+    <div class="form-container">
+        <h2>Login</h2>
+        <form method="POST">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="form-button">Login</button>
+            {% if error %}
+                <p class="error">{{ error }}</p>
+            {% endif %}
+        </form>
+        <p>Don't have an account? <a href="{{ url_for('register') }}">Register here</a>.</p>
+    </div>
+    {% endif %}
+
+    <!-- Fetch Games Section -->
+    {% if 'username' in session %}
+    <div class="fetch-games-container">
+        <h3>Fetch your Steam games:</h3>
+        <form action="{{ url_for('fetch_games') }}" method="POST">
+            <label for="profile_url">Paste your Steam profile URL:</label><br>
+            <input type="text" id="profile_url" name="profile_url" required>
+            <button type="submit" class="form-button">Fetch Games</button>
+        </form>
+        {% if error %}
+        <p class="fetch-games-message">{{ error }}</p>
+        {% endif %}
+    </div>
+
+    <!-- Instructions Section -->
+    <div class="instructions-container">
+        <h3>How to fetch your games:</h3>
+        <ol>
+            <li>Set your Steam profile to public and make sure "Game details" are public as well. Follow this <a href="https://www.youtube.com/watch?v=GlCL6j92yUE" target="_blank">guide</a>.</li>
+            <li>Get your Steam API key and paste it into the 10th line of the `app.py` file. Learn how to get your API key <a href="https://www.youtube.com/watch?v=Sb5p8cGyVQw" target="_blank">here</a>.</li>
+            <li>Paste your Steam profile URL into the "Fetch Games" input field above.</li>
+        </ol>
+        <p><strong>Where to find your Steam profile URL:</strong></p>
+        <img src="{{ url_for('static', filename='url.jpg') }}" alt="Steam Profile URL example">
+    </div>
+    {% endif %}
+</body>
+</html>

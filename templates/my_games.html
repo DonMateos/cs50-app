@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Games - Games Tracker</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* Added style to center the form */
+        .add-game-form {
+            text-align: center;
+            margin: 20px auto;
+        }
+
+        .add-game-form input {
+            padding: 5px 10px;
+            font-size: 14px;
+            width: 250px;
+            margin-right: 10px;
+        }
+
+        .add-game-form button {
+            padding: 6px 12px;
+            font-size: 14px;
+        }
+
+        /* Style for the delete button to make it red */
+        .delete-button {
+            background-color: red;
+            color: white;
+            padding: 6px 12px;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .delete-button:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navbar with left and right sections -->
+    <div class="navbar">
+        <div class="navbar-left">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('my_games') }}">My Games</a>
+        </div>
+        <div class="navbar-right">
+            <a href="{{ url_for('logout') }}">Logout</a>
+        </div>
+    </div>
+
+    <h1 class="welcome">Welcome to Games Tracker</h1>
+
+    {% if message %}
+        <p style="color: green; text-align: center;">{{ message }}</p>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red; text-align: center;">{{ error }}</p>
+    {% endif %}
+
+    {% if not games %}
+        <h2 style="color: red; text-align: center;">You don't have any games fetched yet. Please fetch games first on the home page.</h2>
+    {% else %}
+        <h2>Your Games:</h2>
+
+        <!-- Form to add new game, centered -->
+        <form method="post" class="add-game-form">
+            <input type="text" name="new_game_name" placeholder="Enter game name" required>
+            <button type="submit" name="add_game">Add Game</button>
+        </form>
+
+        <form method="post">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Game</th>
+                        <th>Completed</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for game in games %}
+                        <tr class="{% if game.completed %}completed{% endif %}">
+                            <td>{{ game.name }}</td>
+                            <td>
+                                <input type="checkbox" name="completed" value="{{ game.appid }}" {% if game.completed %}checked{% endif %}>
+                            </td>
+                            <td>
+                                <!-- Delete button with a red color -->
+                                <button type="submit" name="delete_game" value="{{ game.appid }}" class="delete-button">Delete</button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button type="submit" class="form-button">Update Completion Status</button>
+        </form>
+    {% endif %}
+</body>
+</html>
