@@ -29,7 +29,7 @@ flask run
 * CSS
 
 ## Features
-### Login:
+### Login page:
 ![image](https://github.com/DonMateos/cs50-app/blob/main/login.PNG?raw=true)
 The "Login" page of the Steam Games Tracker application features a form with fields for both the username and password, which are required for logging in. If there is an error, such as invalid credentials, an error message is displayed in red. The page also provides links for new users to register or to return to the home page.
 ### Register page:
